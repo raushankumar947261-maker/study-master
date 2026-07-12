@@ -1,0 +1,212 @@
+background:#4a6cf7;
+color:white;
+padding:20px;
+text-align:center;
+font-size:28px;
+font-weight:bold;
+}
+
+.container{
+width:90%;
+max-width:900px;
+margin:20px auto;
+}
+
+.card{
+background:white;
+padding:20px;
+margin:15px 0;
+border-radius:10px;
+box-shadow:0 0 10px rgba(0,0,0,.15);
+}
+
+h2{
+color:#4a6cf7;
+margin-bottom:15px;
+}
+
+button{
+padding:10px 18px;
+border:none;
+background:#4a6cf7;
+color:white;
+border-radius:5px;
+cursor:pointer;
+margin-top:10px;
+}
+
+button:hover{
+background:#3556d9;
+}
+
+textarea,input{
+width:100%;
+padding:10px;
+margin-top:10px;
+border:1px solid #ccc;
+border-radius:5px;
+}
+
+#todoList li{
+margin:8px 0;
+padding:8px;
+background:#eef3ff;
+border-radius:5px;
+list-style:none;
+}
+
+.timer{
+font-size:40px;
+text-align:center;
+margin:15px;
+font-weight:bold;
+}
+
+footer{
+text-align:center;
+padding:20px;
+color:gray;
+}
+</style>
+
+</head>
+<body>
+
+<header>
+📚 Study Master App
+</header>
+
+<div class="container">
+
+<div class="card">
+<h2>📖 My Notes</h2>
+<textarea id="notes" rows="6" placeholder="Write your notes here..."></textarea>
+<button onclick="saveNotes()">Save Notes</button>
+</div>
+
+<div class="card">
+<h2>✅ To Do List</h2>
+
+<input type="text" id="task" placeholder="Enter Task">
+
+<button onclick="addTask()">Add Task</button>
+
+<ul id="todoList"></ul>
+
+</div>
+
+<div class="card">
+<h2>⏰ Study Timer</h2>
+
+<div class="timer" id="timer">
+25:00
+</div>
+
+<button onclick="startTimer()">Start</button>
+
+</div>
+
+</div>
+
+<footer>
+Made with ❤️ using HTML CSS JavaScript
+</footer>
+
+<script>
+
+// Notes
+
+window.onload=function(){
+document.getElementById("notes").value=localStorage.getItem("notes")||"";
+loadTasks();
+}
+
+function saveNotes(){
+localStorage.setItem("notes",document.getElementById("notes").value);
+alert("Notes Saved!");
+}
+
+// Todo
+
+function addTask(){
+
+let task=document.getElementById("task").value;
+
+if(task=="") return;
+
+let tasks=JSON.parse(localStorage.getItem("tasks"))||[];
+
+tasks.push(task);
+
+localStorage.setItem("tasks",JSON.stringify(tasks));
+
+document.getElementById("task").value="";
+
+loadTasks();
+
+}
+
+function loadTasks(){
+
+let tasks=JSON.parse(localStorage.getItem("tasks"))||[];
+
+let list=document.getElementById("todoList");
+
+list.innerHTML="";
+
+tasks.forEach(function(t){
+
+let li=document.createElement("li");
+
+li.innerHTML=t;
+
+list.appendChild(li);
+
+});
+
+}
+
+// Timer
+
+let time=1500;
+
+let running=false;
+
+function startTimer(){
+
+if(running)return;
+
+running=true;
+
+let x=setInterval(function(){
+
+let min=Math.floor(time/60);
+
+let sec=time%60;
+
+document.getElementById("timer").innerHTML=
+
+String(min).padStart(2,'0')+":"+String(sec).padStart(2,'0');
+
+time--;
+
+if(time<0){
+
+clearInterval(x);
+
+alert("Study Time Complete!");
+
+running=false;
+
+time=1500;
+
+}
+
+},1000);
+
+}
+
+</script>
+
+</body>
+</html>
